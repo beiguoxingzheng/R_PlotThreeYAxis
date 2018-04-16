@@ -1,0 +1,32 @@
+# get the data of 70 companies
+library(png)
+comp <- list()
+comp_data <- list()
+# 导入所关注债券的信息：债券代码、债券名、
+focus_comp <- read_excel("D:/R_data/focus_comp.xlsx")
+focus_comp <- as.data.frame(focus_comp)
+comp_name <- focus_comp$comp_name
+comp_indus <- focus_comp$insdustry_name
+
+# 获取数据，对于每一家公司，得到一个dataframe，并用一个list来存储这些dataframe
+for(i in 1:70){
+  comp[[i]] <- w.wsd(focus_comp[i,1],"yoy_tr,debttoassets,finaexpensetogr",
+                   "2014-01-01","2017-12-31","Period=Q;Days=Alldays")
+  comp_data[[i]] <- as.data.frame(comp[[i]]$Data) # 并将所提取的数据单独拿出来
+}
+
+# 将comp_data保存为.Rdata文件，下次通过load()函数将数据加载到R中
+save(comp_data,file='D://R_data//comp_data.Rdata')
+
+
+# 将1:68家公司的数据，批量保存至excel中
+for(i in 1:68){
+  
+}
+
+
+comp_data[[69]] <-"NULL"
+comp_data[[70]] <-"NULL"
+for(i in 1:68){
+  comp_data[[i]][is.na(example[[i]])] <- "NULL"
+}
