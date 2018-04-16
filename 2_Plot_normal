@@ -1,0 +1,45 @@
+
+# 绘制不存在缺失值，或者缺失值较少的企业折线图
+# 给定横轴日期
+
+date1 <- as.Date(comp_data[[1]]$DATETIME)
+date2 <- strptime(date1,'%Y-%m-%d')
+date3 <- c(1:16)
+
+# import the R dataset
+load('D://R_data//comp_data.Rdata')
+
+# 打开pdf，批量画图
+pdf("info_comp_new_100.pdf",family="GB1",width=11,height=9)#注意不要用中文
+for(i in 15:68){
+  par(mai=c(2,2,0.5,2))
+  
+  #Plot the first time series. Notice that you don’t have to draw the axis nor the labels
+  plot(date3, comp_data[[i]]$YOY_TR,axes=F, pch=19,xlab="", ylab="",type="l",col="red",main="")
+  axis(side=1,at=c(date3),labels=paste(date2))
+  axis(2,col="red",lwd=1)
+  mtext(2,text="营业收入同比增长率（%）",line=2)
+  
+  #Plot the second time series.
+  par(new=T)
+  plot(date3, comp_data[[i]]$DEBTTOASSETS,pch=19,axes=F,xlab="", ylab="",type="l",lty=2, col="blue",main="",lwd=2)
+  axis(2,col="blue",lwd=2,line=3.5)
+  mtext(2,text="资产负债率（%）",line=5.5)
+  
+  #Plot the third time series. 
+  par(new=T)
+  plot(date3, comp_data[[i]]$FINAEXPENSETOGR,pch=19, axes=F, xlab="", ylab="",type="l",col="black",lty=3, main="",lwd=4)
+  axis(4,lwd=1,col="black")
+  mtext(4,text="财务费用/营业总收入（%）",line=2)
+  
+  #And then plot the legend.
+  xy <- par("usr")
+  legend(x=xy[2]-xinch(0.2),y=xy[3]-yinch(1.5),legend=c("营业收入同比增长率","资产负债率","财务费用/营业总收入"),
+         xpd=TRUE,lty=c(1,2,3),
+         xjust=1,yjust=0,fill=c("red","blue","black"),
+         text.col=c("red","blue","black"))
+  # 命名
+  graph_name <- paste(i,'-',comp_name[i],'-',comp_indus[i], sep="")
+  title(main=graph_name)
+}
+dev.off()
