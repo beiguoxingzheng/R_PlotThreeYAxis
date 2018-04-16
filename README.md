@@ -1,2 +1,4 @@
-# R_inrtern_fixedincome
-R codes when I used during my fixed income intern
+# using R to plot Three Y axis
+使用R绘制三个不同维度的y轴数据，并批量输出
+using plot, pdf, load, save fuction
+
