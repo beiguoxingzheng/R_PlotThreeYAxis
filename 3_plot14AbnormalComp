@@ -1,0 +1,35 @@
+# 导入comp_data数据集
+load('D://R_data//comp_data.Rdata')
+
+# 绘制第14家企业的折线图，该企业没有第三项指标。所以无法同前几家企业一同绘制
+new<-comp_data[[14]]
+new<- subset(new, select = - FINAEXPENSETOGR) # 删除第三列
+
+# 删除缺失值行
+new<-na.omit(new)
+
+# 绘图
+pdf("final_8.pdf",family="GB1",width=11,height=9)
+par(mai=c(2,2,0.5,2))
+#Plot the first time series. Notice that you don’t have to draw the axis nor the labels
+plot(new$DATETIME,new$YOY_TR,pch=19,type='o',axes=F, xlab="", ylab="",col="red",main="")
+axis(side=1,at=c(new$DATETIME),labels=paste(new$DATETIME))
+axis(2,col="red",lwd=1)
+mtext(2,text="营业收入同比增长率（%）",line=2)
+
+#Plot the second time series.
+par(new=T)
+plot(new$DEBTTOASSETS,pch=6,type='o',axes=F,xlab="", ylab="",lty=2, col="blue",main="",lwd=2)
+axis(2,col="blue",lwd=2,line=3.5)
+mtext(2,text="资产负债率（%）",line=5.5)
+
+#And then plot the legend.
+xy <- par("usr")
+legend(x=xy[2]-xinch(0.2),y=xy[3]-yinch(1.5),legend=c("营业收入同比增长率","资产负债率","财务费用/营业总收入"),
+       xpd=TRUE,lty=c(1,2,3),
+       xjust=1,yjust=0,fill=c("red","blue","black"),
+       text.col=c("red","blue","black"))
+# 命名
+graph_name <- paste(i,'-',comp_name[i],'-',comp_indus[i], sep="")
+title(main=graph_name)
+dev.off()
